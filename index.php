@@ -34,9 +34,15 @@
         <h2>Choix du pseudo :</h2>
         <form action="" method="POST">
             <input type="text" name="pseudo">
-            <button type="submit">Confirmer votre pseudo</button>
+            <button type="submit">Confirmer votre pseudo et commencer le jeu</button>
+        </form>
+        <br>
+        <form action="" method="POST">
+            <input type="text" name="pseudo">
+            <button type="submit">Changer de pseudo</button>
         </form>
     </div>
+    <br>
     <div>
         <button type="submit">Recommencer</button>
     </div>
