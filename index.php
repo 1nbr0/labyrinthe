@@ -1,8 +1,9 @@
 <?php
-$mysqli = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
+session_start();
+$_SESSION['mysqli']= new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
 
-if ($mysqli->connect_errno) {
-    printf("Échec de la connexion : %s\n", $mysqli->connect_error);
+if ($_SESSION['mysqli']->connect_errno) {
+    printf("Échec de la connexion : %s\n", $_SESSION['mysqli']->connect_error);
     exit();
 }
 ?>

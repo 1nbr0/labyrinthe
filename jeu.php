@@ -1,41 +1,45 @@
-<?php   //connection à la BDD
-$mysqli = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
+<?php   //connection à la BDD  en session pour pouvoir eviter de la re ecrire dans chaque fonction
+session_start();
+$_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
 
-if ($mysqli->connect_errno) {
-    printf("Échec de la connexion : %s\n", $mysqli->connect_error);
+if ($_SESSION['mysqli']->connect_errno) {
+    printf("Échec de la connexion : %s\n", $_SESSION['mysqli']->connect_error);
     exit();
 }
 
-$mysqli -> query("USE labyrinte");
-function insertUser($mysqli, $user) {       //Creation du user
-    $sql = "INSERT INTO utilisateurs (nom) VALUES ('".$user."')";
-        
-    if ($mysqli->query($sql) === TRUE) {
-    return $user;
+$_SESSION['mysqli']->query("USE labyrinte");
+function insertUser($joueur)
+{       //Creation du user
+    $sql = "INSERT INTO joueur (nom) VALUES ('" . $joueur . "')";
+
+    if ($_SESSION['mysqli']->query($sql) === TRUE) {
+        return $joueur;
     } else {
-    echo "Error: " . $sql . "<br>" . $mysqli->error;
+        echo "Error: " . $sql . "<br>" . $_SESSION['mysqli']->error;
     }
 }
 
-function getUser($mysqli, $user) {      //affichage du user sur l'ecran
+function getUser($joueur)
+{      //affichage du user sur l'ecran
     $data = [];
-    if ($result = $mysqli->query("SELECT * FROM utilisateurs WHERE nom = '".$user."'")) {
+    if ($result = $_SESSION['mysqli']->query("SELECT * FROM joueur WHERE nom = '" . $joueur . "'")) {
         while ($row = $result->fetch_assoc()) {
             $data[] = $row["nom"];
         }
         $result->close();
         if (count($data) === 0) {
             return NULL;
-        }else {
+        } else {
             return $data[0];
         }
     }
 }
 
-$user = getUser($mysqli, $_POST['pseudo']);
-if ( is_null($user)) {
-    $user = insertUser($mysqli, $_POST["pseudo"]);
+$joueur = getUser($_POST['pseudo']);
+if (is_null($joueur)) {
+    $joueur = insertUser($_POST["pseudo"]);
 }
+
 ?>
 
 <html lang="fr">
@@ -50,6 +54,14 @@ if ( is_null($user)) {
             background-position: center;
             background-repeat: no-repeat;
             height: 100vh;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .restart {
+            text-align: center;
         }
 
         .mur {
@@ -72,23 +84,30 @@ if ( is_null($user)) {
             width: 50px;
             height: 50px;
         }
+
+        .laby {
+            margin-left: 650px;
+        }
     </style>
 
 </head>
 
 <body class="page">
-    <div>
-        <h1>Salut <?php echo($user) ?> !</h1>
+    <div class="title">
+        <h1>Salut <?php echo ($joueur) ?> ! Echappe toi si tu peux ...</h1>
         <form action="" method="POST">
             <input type="text" name="pseudo">
             <button type="submit">Changer de pseudo</button>
         </form>
     </div>
-    <br>
-    <div>
-        <button type="submit">Recommencer</button>
+    <br> <br> <br> <br> <br>
+    <div class="restart">
+        <a href="index.php">
+            <button type="submit">Recommencer</button>
+        </a>
     </div>
-    <div>
+    <br> <br>
+    <div class="laby">
         <?php
         $labyrinthe = fopen('labyrinthe.txt', 'r+');
 
@@ -124,10 +143,12 @@ if ( is_null($user)) {
         </table>
     </div>
     <div>
-        <button type="submit">Haut</button>
-        <button type="submit">Bas</button>
-        <button type="submit">Gauche</button>
-        <button type="submit">Droite</button>
+        <form method="post">
+            <div class="block"> <input type="submit" name="haut" class="button" value="haut" /></div>
+            <input type="submit" name="bas" class="button" value="bas" />
+            <input type="submit" name="gauche" class="button" value="gauche" />
+            <input type="submit" name="droite" class="button" value="droite" />
+        </form>
     </div>
 </body>
 
