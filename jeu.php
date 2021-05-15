@@ -1,7 +1,7 @@
 <?php   //connection à la BDD  en session pour pouvoir eviter de la re ecrire dans chaque fonction
 session_start();
-$_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
-$_SESSION['joueur_id'] = $_SESSION['mysqli']->query("INSERT INTO jeu (joueur_id) VALUES ()");
+    $_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
+// $_SESSION['joueur_id'] = $_SESSION['mysqli']->query("INSERT INTO jeu (joueur_id) VALUES ()");
 
 
 if ($_SESSION['mysqli']->connect_errno) {
@@ -11,7 +11,7 @@ if ($_SESSION['mysqli']->connect_errno) {
 
 $_SESSION['mysqli']->query("USE labyrinte");
 function insertJoueur($joueur)
-{       //Creation du Joueur
+{       //Creation du pseudo du Joueur
     $sql = "INSERT INTO joueur (nom) VALUES ('" . $joueur . "')";
 
     if ($_SESSION['mysqli']->query($sql) === TRUE) {
@@ -22,7 +22,7 @@ function insertJoueur($joueur)
 }
 
 function getJoueur($joueur)
-{      //affichage du joueur sur l'ecran
+{      //recupération du pseudo du joueur
     $data = [];
     if ($result = $_SESSION['mysqli']->query("SELECT * FROM joueur WHERE nom = '" . $joueur . "'")) {
         while ($row = $result->fetch_assoc()) {
@@ -37,20 +37,42 @@ function getJoueur($joueur)
     }
 }
 
-$joueur = getJoueur($_POST['pseudo']);
-if (is_null($joueur)) {
-    $joueur = insertJoueur($_POST["pseudo"]);
-}
 
-function modifBDD($tabLab) {
-    $hauteur = 0;
-    foreach($tabLab as $ligne){
-        $lignestr = implode($ligne);
-        $query = "INSERT INTO jeu (joueur_id, hauteur, ligne) VALUES (?, ?, ?)";
-        $stmt = $_SESSION['mysqli']->prepare($query);
-        $stmt->bind_param("");
+// function verifInput($tabLab) {
+
+    // if (array_key_exists('haut', $_POST)) {
+        // haut($tabLab);
+    // }
+
+    // if (array_key_exists('pseudo', $_POST)) {
+    //     $joueur = getJoueur($_POST['pseudo']);
+    //     if (is_null($joueur)) {
+    //         $joueur = insertJoueur($_POST["pseudo"]);
+    //     }
+    // }
+    
+// }
+
+if (array_key_exists('pseudo', $_POST)) {
+    $joueur = getJoueur($_POST['pseudo']);
+    if (is_null($joueur)) {
+        $joueur = insertJoueur($_POST["pseudo"]);
     }
 }
+
+
+// function modifBDD($tabLab)
+// {
+//     $hauteur = 0;
+//     foreach ($tabLab as $ligne) {
+//         $lignestr = implode($ligne);
+//         $query = "INSERT INTO jeu (hauteur, ligne) VALUES (?, ?)";
+//         $stmt = $_SESSION['mysqli']->prepare($query);
+//         $stmt->bind_param("ss", $hauteur, $lignestr);
+//         $stmt->execute();
+//         $hauteur++;
+//     }
+// }
 ?>
 
 <html lang="fr">
