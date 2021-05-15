@@ -1,6 +1,8 @@
 <?php   //connection à la BDD  en session pour pouvoir eviter de la re ecrire dans chaque fonction
 session_start();
 $_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
+$_SESSION['joueur_id'] = $_SESSION['mysqli']->query("INSERT INTO jeu (joueur_id) VALUES ()");
+
 
 if ($_SESSION['mysqli']->connect_errno) {
     printf("Échec de la connexion : %s\n", $_SESSION['mysqli']->connect_error);
@@ -8,8 +10,8 @@ if ($_SESSION['mysqli']->connect_errno) {
 }
 
 $_SESSION['mysqli']->query("USE labyrinte");
-function insertUser($joueur)
-{       //Creation du user
+function insertJoueur($joueur)
+{       //Creation du Joueur
     $sql = "INSERT INTO joueur (nom) VALUES ('" . $joueur . "')";
 
     if ($_SESSION['mysqli']->query($sql) === TRUE) {
@@ -19,8 +21,8 @@ function insertUser($joueur)
     }
 }
 
-function getUser($joueur)
-{      //affichage du user sur l'ecran
+function getJoueur($joueur)
+{      //affichage du joueur sur l'ecran
     $data = [];
     if ($result = $_SESSION['mysqli']->query("SELECT * FROM joueur WHERE nom = '" . $joueur . "'")) {
         while ($row = $result->fetch_assoc()) {
@@ -35,11 +37,20 @@ function getUser($joueur)
     }
 }
 
-$joueur = getUser($_POST['pseudo']);
+$joueur = getJoueur($_POST['pseudo']);
 if (is_null($joueur)) {
-    $joueur = insertUser($_POST["pseudo"]);
+    $joueur = insertJoueur($_POST["pseudo"]);
 }
 
+function modifBDD($tabLab) {
+    $hauteur = 0;
+    foreach($tabLab as $ligne){
+        $lignestr = implode($ligne);
+        $query = "INSERT INTO jeu (joueur_id, hauteur, ligne) VALUES (?, ?, ?)";
+        $stmt = $_SESSION['mysqli']->prepare($query);
+        $stmt->bind_param("");
+    }
+}
 ?>
 
 <html lang="fr">
@@ -88,6 +99,15 @@ if (is_null($joueur)) {
         .laby {
             margin-left: 650px;
         }
+
+        .direction {
+            margin-left: 950px;
+        }
+
+        .flecheHaut {
+            margin-left: 62px;
+            margin-bottom: 6px;
+        }
     </style>
 
 </head>
@@ -106,7 +126,7 @@ if (is_null($joueur)) {
             <button type="submit">Recommencer</button>
         </a>
     </div>
-    <br> <br>
+    <br>
     <div class="laby">
         <?php
         $labyrinthe = fopen('labyrinthe.txt', 'r+');
@@ -142,11 +162,11 @@ if (is_null($joueur)) {
             <?php endforeach; ?>
         </table>
     </div>
-    <div>
+    <div class="direction">
         <form method="post">
-            <div class="block"> <input type="submit" name="haut" class="button" value="haut" /></div>
-            <input type="submit" name="bas" class="button" value="bas" />
+            <div class="flecheHaut"> <input type="submit" name="haut" class="button" value="haut" /></div>
             <input type="submit" name="gauche" class="button" value="gauche" />
+            <input type="submit" name="bas" class="button" value="bas" />
             <input type="submit" name="droite" class="button" value="droite" />
         </form>
     </div>
