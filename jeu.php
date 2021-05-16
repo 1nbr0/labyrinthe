@@ -9,7 +9,7 @@ if ($_SESSION['mysqli']->connect_errno) {
     exit();
 }
 
-// Recuperation du fichier labyrinthe.txt puis mise en tableau multidimensionnel pour affichage html
+// Recuperation du fichier labyrinthe.txt puis mise en tabl$tabLab multidimensionnel pour affichage html
 $labyrinthe = fopen('labyrinthe.txt', 'r+');
 $tabLab = [];
 while (!feof($labyrinthe)) {
@@ -18,6 +18,7 @@ while (!feof($labyrinthe)) {
 }
 // var_dump($tabLab);
 fclose($labyrinthe);
+
 
 $_SESSION['mysqli']->query("USE labyrinte");
 function insertJoueur($joueur)
@@ -33,35 +34,19 @@ function insertJoueur($joueur)
 
 function getJoueur($joueur)
 {      //recupération du pseudo du joueur
-    $data = [];
+    // $data = [];
     if ($result = $_SESSION['mysqli']->query("SELECT * FROM joueur WHERE nom = '" . $joueur . "'")) {
         while ($row = $result->fetch_assoc()) {
-            $data[] = $row["nom"];
+            $joueur = $row["nom"];
         }
         $result->close();
-        if (count($data) === 0) {
-            return NULL;
-        } else {
-            return $data[0];
-        }
+        // if (count($data) === 0) {
+        //     return NULL;
+        // } else {
+        //     return $data[0];
+        // }
     }
 }
-
-
-// function verifInput($tabLab) {
-
-    // if (array_key_exists('haut', $_POST)) {
-        // haut($tabLab);
-    // }
-
-    // if (array_key_exists('pseudo', $_POST)) {
-    //     $joueur = getJoueur($_POST['pseudo']);
-    //     if (is_null($joueur)) {
-    //         $joueur = insertJoueur($_POST["pseudo"]);
-    //     }
-    // }
-    
-// }
 
 if (array_key_exists('pseudo', $_POST)) {
     $joueur = getJoueur($_POST['pseudo']);
@@ -70,18 +55,24 @@ if (array_key_exists('pseudo', $_POST)) {
     }
 }
 
-// function modifBDD($tabLab)
-// {
-//     $hauteur = 0;
-//     foreach ($tabLab as $ligne) {
-//         $lignestr = implode($ligne);
-//         $query = "INSERT INTO jeu (hauteur, ligne) VALUES (?, ?)";
-//         $stmt = $_SESSION['mysqli']->prepare($query);
-//         $stmt->bind_param("ss", $hauteur, $lignestr);
-//         $stmt->execute();
-//         $hauteur++;
-//     }
-// }
+function modifBDD($tabLab)
+{
+    $hauteur = 0;
+    foreach($tabLab as $ligne) {
+        $query = "TRUNCATE TABLE jeu";
+        $_SESSION['mysqli']->query($query);
+    }
+
+    foreach ($tabLab as $ligne) {
+        $lignestr = implode($ligne);
+        $query = "INSERT INTO jeu (hauteur, ligne) VALUES (?, ?)";
+        $stmt = $_SESSION['mysqli']->prepare($query);
+        $stmt->bind_param("ss", $hauteur, $lignestr);
+        $stmt->execute();
+        $hauteur++;
+    }
+}
+modifBDD($tabLab);
 ?>
 
 <html lang="fr">
@@ -96,6 +87,7 @@ if (array_key_exists('pseudo', $_POST)) {
             background-position: center;
             background-repeat: no-repeat;
             height: 100vh;
+            margin: 50px;
         }
 
         .title {
@@ -148,16 +140,14 @@ if (array_key_exists('pseudo', $_POST)) {
         <h1>Salut <?php echo ($joueur) ?> ! Echappe toi si tu peux ...</h1>
         <form action="" method="POST">
             <input type="text" name="pseudo">
-            <button type="submit">Changer de pseudo</button>
+            <button type="submit" name="nickname_change">Changer de pseudo</button>
         </form>
     </div>
-    <br> <br> <br> <br> <br>
     <div class="restart">
         <a href="index.php">
             <button type="submit">Recommencer</button>
         </a>
     </div>
-    <br>
     <div class="laby">
         <table>
             <?php foreach ($tabLab as $ligne) : ?>
