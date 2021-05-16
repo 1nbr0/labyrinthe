@@ -1,13 +1,23 @@
 <?php   //connection à la BDD  en session pour pouvoir eviter de la re ecrire dans chaque fonction
 session_start();
     $_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
-// $_SESSION['joueur_id'] = $_SESSION['mysqli']->query("INSERT INTO jeu (joueur_id) VALUES ()");
+
 
 
 if ($_SESSION['mysqli']->connect_errno) {
     printf("Échec de la connexion : %s\n", $_SESSION['mysqli']->connect_error);
     exit();
 }
+
+$labyrinthe = fopen('labyrinthe.txt', 'r+');
+
+$tabLab = [];
+while (!feof($labyrinthe)) {
+    $ligne = fgets($labyrinthe);
+    $tabLab[] = explode(" ", $ligne);
+}
+// var_dump($tabLab);
+fclose($labyrinthe);
 
 $_SESSION['mysqli']->query("USE labyrinte");
 function insertJoueur($joueur)
@@ -59,7 +69,6 @@ if (array_key_exists('pseudo', $_POST)) {
         $joueur = insertJoueur($_POST["pseudo"]);
     }
 }
-
 
 // function modifBDD($tabLab)
 // {
@@ -150,18 +159,6 @@ if (array_key_exists('pseudo', $_POST)) {
     </div>
     <br>
     <div class="laby">
-        <?php
-        $labyrinthe = fopen('labyrinthe.txt', 'r+');
-
-        $tabLab = [];
-        while (!feof($labyrinthe)) {
-            $ligne = fgets($labyrinthe);
-            $tabLab[] = explode(" ", $ligne);
-        }
-        // var_dump($tabLab);
-
-        fclose($labyrinthe);
-        ?>
         <table>
             <?php foreach ($tabLab as $ligne) : ?>
                 <tr>

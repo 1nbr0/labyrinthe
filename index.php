@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!(isset($_SESSION['mysqli']))) {
-    $_session['mysqli']= new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
+    $_SESSION['mysqli']= new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
 }
 
 
