@@ -9,8 +9,8 @@ if ($_SESSION['mysqli']->connect_errno) {
     exit();
 }
 
+// Recuperation du fichier labyrinthe.txt puis mise en tableau multidimensionnel pour affichage html
 $labyrinthe = fopen('labyrinthe.txt', 'r+');
-
 $tabLab = [];
 while (!feof($labyrinthe)) {
     $ligne = fgets($labyrinthe);
