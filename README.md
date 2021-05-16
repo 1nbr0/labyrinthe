@@ -1,1 +1,2 @@
-# labyrinthe
+# Jeu du labyrinthe en PHP.
+
