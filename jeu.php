@@ -9,7 +9,7 @@ if ($_SESSION['mysqli']->connect_errno) {
     exit();
 }
 
-// Recuperation du fichier labyrinthe.txt puis mise en tabl$tabLab multidimensionnel pour affichage html
+// Recuperation du fichier labyrinthe.txt puis mise en tableau multidimensionnel pour affichage html
 $labyrinthe = fopen('labyrinthe.txt', 'r+');
 $tabLab = [];
 while (!feof($labyrinthe)) {
@@ -62,15 +62,15 @@ if (array_key_exists('pseudo', $_POST)) {
     }
 }
 
-function modifBDD($tabLab)
+function modifBDD($tabLabBDD)
 {
     $hauteur = 0;
-    foreach ($tabLab as $ligne) {
+    foreach ($tabLabBDD as $ligne) {
         $query = "TRUNCATE TABLE jeu";
         $_SESSION['mysqli']->query($query);
     }
 
-    foreach ($tabLab as $ligne) {
+    foreach ($tabLabBDD as $ligne) {
         $lignestr = implode($ligne);
         $query = "INSERT INTO jeu (hauteur, ligne) VALUES (?, ?)";
         $stmt = $_SESSION['mysqli']->prepare($query);
@@ -79,7 +79,7 @@ function modifBDD($tabLab)
         $hauteur++;
     }
 }
-modifBDD($tabLab);
+modifBDD($tabLabBDD);
 ?>
 
 <html lang="fr">
@@ -164,11 +164,8 @@ modifBDD($tabLab);
             <?php foreach ($tabLabBDD as $ligne) : ?>
                 <tr>
                     <?php foreach ($ligne as $case) : ?>
-                        <?php if ($case == 0) : ?>
+                        <?php if ($case == 8) : ?>
                             <td class="mur">
-                            <?php endif; ?>
-                            <?php if ($case == NULL) : ?>
-                            <td class="nothing">    
                             <?php endif; ?>
                             <?php if ($case == 1) : ?>
                             <td class="chemin">
@@ -190,7 +187,7 @@ modifBDD($tabLab);
             <?php foreach ($tabLab as $ligne) : ?>
                 <tr>
                     <?php foreach ($ligne as $case) : ?>
-                        <?php if ($case == 0) : ?>
+                        <?php if ($case == 8) : ?>
                             <td class="mur">
                             <?php endif; ?>
                             <?php if ($case == 1) : ?>
