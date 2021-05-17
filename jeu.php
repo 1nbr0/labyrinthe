@@ -1,6 +1,6 @@
 <?php   //connection à la BDD  en session pour pouvoir eviter de la re ecrire dans chaque fonction
 session_start();
-    $_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
+$_SESSION['mysqli'] = new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
 
 
 
@@ -18,6 +18,13 @@ while (!feof($labyrinthe)) {
 }
 // var_dump($tabLab);
 fclose($labyrinthe);
+
+if ($reponse = $_SESSION['mysqli']->query("SELECT ligne FROM jeu")) {
+    $tabLabBDD = [];
+    while ($row = $reponse->fetch_assoc()) {
+        $tabLabBDD[] = str_split($row['ligne']);
+    }
+}
 
 
 $_SESSION['mysqli']->query("USE labyrinte");
@@ -58,7 +65,7 @@ if (array_key_exists('pseudo', $_POST)) {
 function modifBDD($tabLab)
 {
     $hauteur = 0;
-    foreach($tabLab as $ligne) {
+    foreach ($tabLab as $ligne) {
         $query = "TRUNCATE TABLE jeu";
         $_SESSION['mysqli']->query($query);
     }
@@ -100,6 +107,10 @@ modifBDD($tabLab);
 
         .mur {
             background-image: url("image/mur.jpg");
+        }
+
+        .nothing {
+            display: none;
         }
 
         .chemin {
@@ -147,6 +158,32 @@ modifBDD($tabLab);
         <a href="index.php">
             <button type="submit">Recommencer</button>
         </a>
+    </div>
+    <div>
+        <table>
+            <?php foreach ($tabLabBDD as $ligne) : ?>
+                <tr>
+                    <?php foreach ($ligne as $case) : ?>
+                        <?php if ($case == 0) : ?>
+                            <td class="mur">
+                            <?php endif; ?>
+                            <?php if ($case == NULL) : ?>
+                            <td class="nothing">    
+                            <?php endif; ?>
+                            <?php if ($case == 1) : ?>
+                            <td class="chemin">
+                            <?php endif; ?>
+                            <?php if ($case == 2) : ?>
+                            <td class="sortie">
+                            <?php endif; ?>
+                            <?php if ($case == 3) : ?>
+                            <td class="perso">
+                            <?php endif; ?>
+                            </td>
+                        <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
     </div>
     <div class="laby">
         <table>
