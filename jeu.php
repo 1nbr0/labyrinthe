@@ -87,62 +87,7 @@ modifBDD($tabLabBDD);
 <head>
     <meta charset="utf-8" />
     <title>Le Labyrinthe</title>
-    <style>
-        .page {
-            background-image: url('image/page_index.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            margin: 50px;
-        }
-
-        .title {
-            text-align: center;
-        }
-
-        .restart {
-            text-align: center;
-        }
-
-        .mur {
-            background-image: url("image/mur.jpg");
-        }
-
-        .nothing {
-            display: none;
-        }
-
-        .chemin {
-            background-image: url("image/chemin.jpg");
-        }
-
-        .sortie {
-            background-image: url("image/sortie.jpg");
-        }
-
-        .perso {
-            background-image: url("image/perso.jpg");
-        }
-
-        td {
-            width: 50px;
-            height: 50px;
-        }
-
-        .laby {
-            margin-left: 650px;
-        }
-
-        .direction {
-            margin-left: 950px;
-        }
-
-        .flecheHaut {
-            margin-left: 62px;
-            margin-bottom: 6px;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -159,32 +104,9 @@ modifBDD($tabLabBDD);
             <button type="submit">Recommencer</button>
         </a>
     </div>
-    <div>
-        <table>
-            <?php foreach ($tabLabBDD as $ligne) : ?>
-                <tr>
-                    <?php foreach ($ligne as $case) : ?>
-                        <?php if ($case == 8) : ?>
-                            <td class="mur">
-                            <?php endif; ?>
-                            <?php if ($case == 1) : ?>
-                            <td class="chemin">
-                            <?php endif; ?>
-                            <?php if ($case == 2) : ?>
-                            <td class="sortie">
-                            <?php endif; ?>
-                            <?php if ($case == 3) : ?>
-                            <td class="perso">
-                            <?php endif; ?>
-                            </td>
-                        <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
     <div class="laby">
-        <table>
-            <?php foreach ($tabLab as $ligne) : ?>
+    <table>
+            <?php foreach ($tabLabBDD as $ligne) : ?>
                 <tr>
                     <?php foreach ($ligne as $case) : ?>
                         <?php if ($case == 8) : ?>

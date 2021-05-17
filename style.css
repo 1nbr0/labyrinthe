@@ -1,0 +1,76 @@
+/* BEGIN STYLE GLOBALE POUR LES DEUX PAGES : index.php et jeu.php */
+body {
+    margin: auto;
+}
+
+div {
+    font-family: Helvetica;
+    display: block;
+}
+
+h1 {
+    display: block;
+    font-weight: bold;
+}
+
+.page {
+    background-image: url('image/page_index.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.titre {
+    text-align: center;
+    padding: 400px;
+}
+
+/* BEGIN STYLE POUR jeu.php */
+.title {
+    text-align: center;
+}
+
+.restart {
+    text-align: center;
+}
+
+.mur {
+    background-image: url("image/mur.jpg");
+}
+
+.chemin {
+    background-image: url("image/chemin.jpg");
+}
+
+.sortie {
+    background-image: url("image/sortie.jpg");
+}
+
+.perso {
+    background-image: url("image/perso.jpg");
+}
+
+td {
+    width: 45px;
+    height: 45px;
+}
+
+.laby {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 80px;
+    margin-bottom: 25px;
+}
+
+.direction {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.flecheHaut {
+    margin-left: 62px;
+    margin-bottom: 6px;
+}

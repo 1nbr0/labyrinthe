@@ -15,41 +15,14 @@ if ($_SESSION['mysqli']->connect_errno) {
 <head>
     <meta charset="utf-8" />
     <title>Le Labyrinthe</title>
-    <style>
-        body {
-            margin: auto;
-        }
-
-        div {
-            font-family: Helvetica;
-            display: block;
-        }
-
-        h1 {
-            display: block;
-            font-weight: bold;
-        }
-
-        .page {
-            background-image: url('image/page_index.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-        }
-
-        .titre {
-            text-align: center;
-            padding: 400px;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
 <body class="page">
     <div class="titre">
         <h1>Bonjour, bienvenue dans le jeu du Labyrinthe.</h1>
-        <h2>Choix du pseudo :</h2>
+        <h2>Choisir votre pseudo pour commencer le jeu :</h2>
         <!-- formulaire pseudo -->
         <form action="jeu.php" method="post">
             <div>
