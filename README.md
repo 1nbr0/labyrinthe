@@ -6,6 +6,7 @@ Dans cet exercice, vous devrez programmer un jeu de labyrinthe en PHP. Le labyri
 faire 15 lignes sur 15 colonnes.
 
 Je galère beaucoup au niveau de l'algorithmique.
+Je me suis beaucoup aidé de tuto Youtube fait par PrimFX.
 
 ## 2 - Etapes réalisées :
 

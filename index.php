@@ -4,10 +4,13 @@ if (!(isset($_SESSION['mysqli']))) {
     $_SESSION['mysqli']= new mysqli("localhost", "labyrinthe", "labyrinthe", "labyrinthe");
 }
 
-
 if ($_SESSION['mysqli']->connect_errno) {
     printf("Échec de la connexion : %s\n", $_SESSION['mysqli']->connect_error);
     exit();
+}
+
+if(isset($_POST['pseudo']) AND !empty($_POST['pseudo'])) {
+    $_SESSION['pseudo'] = $_POST['pseudo'];
 }
 ?>
 <html lang="fr">
@@ -24,11 +27,9 @@ if ($_SESSION['mysqli']->connect_errno) {
         <h1>Bonjour, bienvenue dans le jeu du Labyrinthe.</h1>
         <h2>Choisir votre pseudo pour commencer le jeu :</h2>
         <!-- formulaire pseudo -->
-        <form action="jeu.php" method="post">
-            <div>
-                <input type="text" name="pseudo">
-                <button type="submit" name="nickname">Selectionner ce surnom</button>
-            </div>
+        <form action="jeu.php" method="POST">
+                <input type="text" name="pseudo" placeholder="Pseudo">
+                <input type="submit" name="value" value="Selectionner ce Pseudo">
         </form>
     </div>
 </body>
