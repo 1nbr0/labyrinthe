@@ -29,6 +29,78 @@ if ($labyrinthe) {
     }
     fclose($labyrinthe);
 }
+function gererDirections($tabLab) {
+    if(array_key_exists('haut', $_POST)){
+        haut($tabLab);
+    } else if (array_key_exists('bas', $_POST)) {
+        bas($tabLab);
+    }else if (array_key_exists('gauche', $_POST)) {
+        gauche($tabLab);
+    } else if (array_key_exists('droite', $_POST)) {
+        droite($tabLab);
+    }
+}
+
+function findJoueur($tabLab) {
+    $i = 0;
+    foreach ($tabLab as $key => $ligne) {
+        foreach ($ligne as $key2 => $case) {
+            if ($key = array_search("3", $case)) {
+                return [$key, $i];
+            } else if ($key2 = array_search("3", $case)) {
+                return [$i, $key2];
+            }
+            $i++;
+        }
+    }
+}
+
+function haut($tabLab)  {
+    echo"Vers le haut";
+    $key = findJoueur($tabLab);
+    $key2 = findJoueur($tabLab);
+    if ($tabLab[$key[0] - 1][$key2[1]] == "v") {
+        $tabLab[$key[0]][$key2[1]] = "v";
+        $tabLab[$key[0] - 1][$key2[1]] = "j";
+    }
+    modifBDD($tabLab);
+}
+
+function bas($tabLab)  {
+    echo"Vers le bas";
+    $key = findJoueur($tabLab);
+    $key2 = findJoueur($tabLab);
+    if ($tabLab[$key[0] + 1][$key2[1]] == "v") {
+        $tabLab[$key[0]][$key2[1]] = "v";
+        $tabLab[$key[0] - 1][$key2[1]] = "j";
+    }
+    modifBDD($tabLab);
+}
+
+function gauche($tabLab)  {
+    echo"Vers la gauche";
+    $key = findJoueur($tabLab);
+    $key2 = findJoueur($tabLab);
+    if ($tabLab[$key[0]][$key2[1] - 1] == "v") {
+        $tabLab[$key[0]][$key2[1]] = "v";
+        $tabLab[$key[0]][$key2[1] - 1] = "j";
+    }
+    modifBDD($tabLab);
+}
+
+function droite($tabLab)  {
+    echo"Vers la droite";
+    $key = findJoueur($tabLab);
+    $key2 = findJoueur($tabLab);
+    if ($tabLab[$key[0]][$key2[1] + 1] == "v") {
+        $tabLab[$key[0]][$key2[1]] = "v";
+        $tabLab[$key[0]][$key2[1] + 1] = "j";
+    }
+    modifBDD($tabLab);
+}
+
+
+
 // y, x, case
 // 0, 0, x
 // 0, 1, x
@@ -57,7 +129,7 @@ function modifBDD($tabLab)
         }
     }
 }
-modifBDD($tabLab);
+// modifBDD($tabLab);
 ?>
 
 <html lang="fr">
