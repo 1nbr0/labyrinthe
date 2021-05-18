@@ -7,7 +7,7 @@ if ($_SESSION['mysqli']->connect_errno) {
     exit();
 }
 
-if(isset($_POST['pseudo']) AND !empty($_POST['pseudo'])) {
+if (isset($_POST['pseudo']) and !empty($_POST['pseudo'])) {
     $_SESSION['pseudo'] = $_POST['pseudo'];
 }
 // Recuperation du fichier labyrinthe.txt puis mise en tableau multidimensionnel pour affichage html
@@ -19,7 +19,7 @@ if ($labyrinthe) {
     while (!feof($labyrinthe)) {
         $ligne = fgets($labyrinthe);
         for ($i = 0; $i < strlen($ligne); $i++) {
-            if($ligne[$i] != "\n" && $ligne[$i] != " ") {
+            if ($ligne[$i] != "\n" && $ligne[$i] != " ") {
                 $tabLab[$a][$b] = $ligne[$i];
                 $b++;
             }
@@ -27,36 +27,37 @@ if ($labyrinthe) {
         $a++;
         $b = 0;
     }
-    // var_dump($tabLab);
     fclose($labyrinthe);
 }
-
-if ($reponse = $_SESSION['mysqli']->query("SELECT ligne FROM jeu")) {
-    $tabLabBDD = [];
+// y, x, case
+// 0, 0, x
+// 0, 1, x
+// ..., ..., ...
+// 14, 1, x
+if ($reponse = $_SESSION['mysqli']->query("SELECT y, x, case FROM jeu")) {
     while ($row = $reponse->fetch_assoc()) {
-        $tabLabBDD[] = str_split($row['ligne']);
+        $tabLab[] = str_split($row['case']);
     }
 }
 
-function modifBDD($tabLabBDD)
+function modifBDD($tabLab)
 {
-    $y = 1;
-    foreach ($tabLabBDD as $ligne) {
+    foreach ($tabLab as $ligne) {
         $query = "TRUNCATE TABLE jeu";
         $_SESSION['mysqli']->query($query);
     }
-
-    foreach ($tabLabBDD as $ligne) {
-        $lignestr = implode($ligne);
-        $query = "INSERT INTO jeu (y, ligne) VALUES (?, ?)";
-        $stmt = $_SESSION['mysqli']->prepare($query);
-        $stmt->bind_param("ss", $y, $lignestr);
-        $stmt->execute();
-        $y++;
+    foreach ($tabLab as $key => $ligne) {
+        foreach ($ligne as $key2 => $case) {
+            if ($case == "8" || $case == "1" || $case=="3" || $case=="2") {
+                $query = "INSERT INTO jeu (`y`, `x`, `case`) VALUES (?, ?, ?)";
+                $stmt = $_SESSION['mysqli']->prepare($query);
+                $stmt->bind_param("iis", $key, $key2, $case);
+                $stmt->execute();
+            }
+        }
     }
 }
-modifBDD($tabLabBDD);
-
+modifBDD($tabLab);
 ?>
 
 <html lang="fr">
@@ -82,8 +83,8 @@ modifBDD($tabLabBDD);
         </a>
     </div>
     <div class="laby">
-    <table>
-            <?php foreach ($tabLabBDD as $ligne) : ?>
+        <table>
+            <?php foreach ($tabLab as $ligne) : ?>
                 <tr>
                     <?php foreach ($ligne as $case) : ?>
                         <?php if ($case == 8) : ?>
